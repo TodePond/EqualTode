@@ -91,7 +91,8 @@ const setColours = (element, rule) => {
 setColours(0, v => [v, v, v])
 //setColours(1, v => [0, v, Math.round(v/2)])
 setColours(1, v => [255-v, 255, v])
-setColours(2, v => [0, Math.round(v/2), v])
+setColours(2, v => [255-v, 255, v])
+setColours(3, v => [255-v, 255, v])
 
 //======//
 // DRAW //
@@ -123,7 +124,7 @@ show.tick = (context) => {
 //=======//
 // PAINT //
 //=======//
-let brush = {element: [2], value: [...(0).to(255)]}
+let brush = {element: [1], value: [...(0).to(255)]}
 const paint = () => {
 	if (!Mouse.Left) return
 	const [x, y] = Mouse.position.map(v => Math.round(v / show.scale))
@@ -203,40 +204,48 @@ KEYDOWN["c"] = () => {
 }
 
 KEYDOWN["1"] = () => {
-	brush = {element: [2], value: [...(0).to(255)]}
 	rules.clear()
 	rules.set("a", (a, b) => (a+b-1)/2)
 	rules.set("b", (a, b) => b)
 	rules.set(2, () => 255)
+	rules.set(3, () => 0)
 }
 
 KEYDOWN["2"] = () => {
-	brush = {element: [2], value: [...(0).to(255)]}
 	rules.clear()
 	rules.set("a", (a, b) => b)
 	rules.set("b", (a, b) => a)
+	rules.set(2, () => 255)
+	rules.set(3, () => 0)
 }
 
 KEYDOWN["3"] = () => {
-	brush = {element: [2], value: [...(0).to(255)]}
 	rules.clear()
 	rules.set("a", (a, b) => a)
 	rules.set("b", (a, b) => a)
+	rules.set(2, () => 255)
+	rules.set(3, () => 0)
 }
 
 KEYDOWN["4"] = () => {
-	brush = {element: [1], value: [...(0).to(255)]}
 	rules.clear()
 	rules.set("a", (a, b) => a > b? a-3 : b-3)
 	rules.set("b", (a, b) => a > b? a-3 : b-3)
+	rules.set(2, () => 255)
+	rules.set(3, () => 0)
 }
 
 KEYDOWN["5"] = () => {
-	brush = {element: [1], value: [...(0).to(255)]}
 	rules.clear()
-	rules.set("a", (a, b) => b-1)
-	rules.set("b", (a, b) => a-1)
+	rules.set("a", (a, b) => (a*0.75+b*0.25))
+	rules.set("b", (a, b) => (a*0.75+b*0.25))
+	rules.set(2, () => 255)
+	rules.set(3, () => 0)
 }
+
+KEYDOWN["q"] = () => brush = {element: [1], value: [...(0).to(255)]}
+KEYDOWN["w"] = () => brush = {element: [2], value: [...(0).to(255)]}
+KEYDOWN["e"] = () => brush = {element: [3], value: [...(0).to(255)]}
 
 KEYDOWN["4"]()
 emptyWorld()
