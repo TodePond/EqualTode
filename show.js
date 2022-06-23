@@ -17,7 +17,6 @@ const Show = {}
 
 	const start = (show) => {
 		
-		// TODO: support canvases of different sizes. just for provided ones? or all?
 		if (show.canvas === undefined) {
 			document.body.style["margin"] = "0px"
 			document.body.style["overflow"] = "hidden"
@@ -33,10 +32,10 @@ const Show = {}
 		}
 		
 		const resize = () => {
-			show.canvas.width = Math.round(innerWidth * show.scale)
-			show.canvas.height = Math.round(innerHeight * show.scale)
-			show.canvas.style["width"] = show.canvas.width
-			show.canvas.style["height"] = show.canvas.height
+			show.canvas.width = Math.round(innerWidth)
+			show.canvas.height = Math.round(innerHeight)
+			show.canvas.style["width"] = show.canvas.width * show.scale
+			show.canvas.style["height"] = show.canvas.height * show.scale
 			show.resize(show.context, show.canvas)
 		}
 

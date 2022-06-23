@@ -84,12 +84,13 @@ linkNeighbours()
 const colourers = new Map()
 const setColours = (element, rule) => {
 	const numbers = [...(0).to(255)].map(rule)
-	const strings = numbers.map(([r, g, b]) => `rgb(${r}, ${g}, ${b})`)
+	const strings = numbers.map(([r, g, b]) => `hsl(${r / 255 * 360}, ${g / 255 * 100}%, ${b / 255 * 100}%)`)
 	colourers.set(element, strings)
 }
 
 setColours(0, v => [v, v, v])
-setColours(1, v => [0, v, Math.round(v/2)])
+//setColours(1, v => [0, v, Math.round(v/2)])
+setColours(1, v => [255-v, 255, v])
 setColours(2, v => [0, Math.round(v/2), v])
 
 //======//
@@ -112,7 +113,7 @@ const draw = (context) => {
 //======//
 // SHOW //
 //======//
-const show = Show.start()
+const show = Show.start({scale: 5.0})
 show.tick = (context) => {
 	paint()
 	update()
@@ -125,7 +126,7 @@ show.tick = (context) => {
 let brush = {element: [2], value: [...(0).to(255)]}
 const paint = () => {
 	if (!Mouse.Left) return
-	const [x, y] = Mouse.position
+	const [x, y] = Mouse.position.map(v => Math.round(v / show.scale))
 	const cell = getCell(x, y)
 	if (cell === undefined) return
 	const element = brush.element[Random.Uint8 % brush.element.length]
@@ -204,8 +205,8 @@ KEYDOWN["c"] = () => {
 KEYDOWN["1"] = () => {
 	brush = {element: [2], value: [...(0).to(255)]}
 	rules.clear()
-	rules.set("a", (a, b) => (a+b)/2)
-	rules.set("b", (a, b) => b-1)
+	rules.set("a", (a, b) => (a+b-1)/2)
+	rules.set("b", (a, b) => b)
 	rules.set(2, () => 255)
 }
 
@@ -228,6 +229,13 @@ KEYDOWN["4"] = () => {
 	rules.clear()
 	rules.set("a", (a, b) => a > b? a-3 : b-3)
 	rules.set("b", (a, b) => a > b? a-3 : b-3)
+}
+
+KEYDOWN["5"] = () => {
+	brush = {element: [1], value: [...(0).to(255)]}
+	rules.clear()
+	rules.set("a", (a, b) => b-1)
+	rules.set("b", (a, b) => a-1)
 }
 
 KEYDOWN["4"]()
